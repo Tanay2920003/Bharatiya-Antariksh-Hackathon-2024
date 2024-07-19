@@ -1,1 +1,14 @@
 pip install pip-tools
+ how to use
+ create a requirements.in file then
+ in file :
+ example -------------
+
+ Flask
+requests
+-----------------
+
+pip-compile requirements.in
+
+
+
