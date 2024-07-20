@@ -24,6 +24,18 @@ ffmpeg -i C:/Users/Tanay/Downloads/audio1.wav -ac 1 C:/Users/Tanay/Downloads/aud
 audio should be in wav
 and mono not stereo
 
+audio samples-https://audio-samples.github.io/#section-1
+
+to convert use ffmpeg =
+to convert
+-ffmpeg -i C:/Users/Tanay/Downloads/sample.mp3 -ar 16000 C:/Users/Tanay/Downloads/sample1.wav
+in powershell
+
+to convert in mono
+
+>ffmpeg -i C:/Users/Tanay/Downloads/audio1.wav -ac 1 C:/Users/Tanay/Downloads/audio1_mono.wav
+
+
 
 
 

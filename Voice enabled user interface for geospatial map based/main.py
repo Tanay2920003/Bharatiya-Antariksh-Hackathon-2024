@@ -21,4 +21,4 @@ def transcribe_audio(audio_file_path):
         print(f"Transcript: {result.alternatives[0].transcript}")
 
 # Example usage:
-transcribe_audio('C:/Users/Tanay/Downloads/audio2.wav')
+transcribe_audio('C:/Users/Tanay/Desktop/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/sample/sample2.wav')
