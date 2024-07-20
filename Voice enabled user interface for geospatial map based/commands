@@ -19,6 +19,11 @@ run: pip install google-cloud-speech
 for structured login
 run: pip install absl-py
 
+google speech -------
+ffmpeg -i C:/Users/Tanay/Downloads/audio1.wav -ac 1 C:/Users/Tanay/Downloads/audio1_mono.wav
+audio should be in wav
+and mono not stereo
+
 
 
 
