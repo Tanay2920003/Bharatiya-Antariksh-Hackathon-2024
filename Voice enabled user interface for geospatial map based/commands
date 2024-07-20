@@ -5,10 +5,20 @@ pip install pip-tools
  example -------------
 
  Flask
-requests
+ requests
 -----------------
 
 pip-compile requirements.in
+
+after creating requirements.txt
+run: pip install -r requirements.txt
+
+module for speech to text:
+run: pip install google-cloud-speech
+
+for structured login
+run: pip install absl-py
+
 
 
 
