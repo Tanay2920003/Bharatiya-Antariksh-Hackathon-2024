@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "hybrid-sunbeam-429814-a0",
+  "private_key_id": "7aae21dccd0b966b000d6c669fe197a2de5e8f81",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqdjqoZN5IuvM4\nqUSk5RF16qn6yNAbh8+gcPyCTdFLA81tUFhISlQjokEQQusH4CP4cC3BD/drfa9Z\ndyxHAMq9hwie/ZRpxRHcEuZDt1EhUpCtcD2N1GSyMQJYPvn2gD6sVVuTNm3Gkhdx\nplAbvYEPDXlhoJpNgX8KE4VJKN/0EQxjplFq6/8hbKbE5mzdcdboU0qXhO8gBIws\n7o5yUMdvuerHLXDRMOxwiy4XDnuHk2Qaz0+s/pxyiiBwbPGuSn6jCbNGkuGNLHSU\n6f8m5CpBFWYJ0Q2elgtvWwUFv6O/0o1HWUlQSg1XZm5LcBOzr7dXIv9fYceiy+Dc\n4l+9UrZfAgMBAAECggEAGsL/CIr1fvOi1cV1WnIAIMQbtZyrV3cl+Klka0yuTBmn\nub7AbXEF7qY9ksD+xzjATPPHqyTHkl+kFOap0+fi7IhzqQpkr4pZ+HQbJIx2N0YQ\nIrqZX1f2Cye4l4QjmDigHkw0WVNVPrSW66fRsdk5ltRltxcQwpRPDpTr+wVoy5dT\n/MlwPH5+K0J+dTPRfO4QGjWoCtwGhCroFqgIO+46vN3CrYT85IzHSvSzblo8an4M\n8haLn67IRvKtYOOsEIAiRPC9VhO/6m7LzEPIyR9nj7eX8GpuBiv9ulOINChV7eIq\nkJRnff0QsrqDCZJeqsiYy5gKP8/p+EaS5M1CpsJd+QKBgQDXCZougm0P8o7cVRGP\nqRYzw70DR8QJvdSsuipByVo7cD4kUfnidoHxCGmHeVfYg714FAX/wT3SzixiUwHZ\n4zmDzfw7h16dzaQYkYTaQx1qWlG4cgWvYHGwy6jBNLaVKL0Y0MAf/0Kezbp0Z/j6\nro7yJ2wRB6nd4UhViItlgNvcewKBgQDK7t/lwKSv5GGXlnb4ms3QqxMTOQ9179+Z\nvict1V0wYkxWr4fXqjxvIncIWNnseGQnyX4N9LM6gjsM7HONuX7Vu5/CxHoOTKO/\nYt+oFtoqI9fddrGOP3w2DnqX0oPK4jjMsomIzL+CP6VQWQR9fEa5Y1i8VexEncvR\ntVJjW5CibQKBgGoxB77oEcvKUNpl+CIlsh0mEHVKP3lAEYKq/Ks4MCMiLs3o3aoE\nM+8/5D1Oox79D9f4q229lDZCMpDrxQJAv+pjEqijFQqAvwSS+DSA6EnZCHo5dK1C\nx2IzcMbYrUHDuH5EuFwUxmV92xIZNk81XMogxbEzQ6Oa2QnEQHKDzA95AoGADmB8\nBkfuovN4IogrZ5N4D1d/Y3ZAbSeQXNEG741VK89a/y0yX4oU+/6iFjpNPh6NYfA5\neP2kEPoW+uRpj1nb7YJ8YA0RZJ/zXeTAWaU80Y12hp8ZFy3SO/Yso0LryVzbj0z6\nx3FSBAVETfvwgH9kd0/dgoJH2digDvxcmONszMUCgYEAyJFP1fFBqbVgn63vHmcO\nfb01ITwIEmXA4QoLhWjJ/dgI9UaYXxnbvp8dJ+GbesW8ArdhPyJJA4WEbpZAFRCm\nN37k+9URD/rDwj24m6U00GsA82UNKt4IKvmrKa6tAddh1erqihGx4tOpfK5FaTeR\nj0a0YUccSZkqH1B9a/GcwDE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "speech-to-text-hackathon@hybrid-sunbeam-429814-a0.iam.gserviceaccount.com",
+  "client_id": "113721732375081835371",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speech-to-text-hackathon%40hybrid-sunbeam-429814-a0.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
