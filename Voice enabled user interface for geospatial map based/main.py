@@ -9,11 +9,12 @@ def transcribe_audio(audio_file_path):
         sample_rate_hertz=16000,
         language_code='en-US',  # Change to your desired language
     )
-    client = speech.SpeechClient.from_service_account_json('C:\Users\Pradeep Saxena\Desktop\TeamHackathon\Bharatiya-Antariksh-Hackathon-2024\Voice enabled user interface for geospatial map based\hybrid-sunbeam-429814-a0-7aae21dccd0b.json')
+    client = speech.SpeechClient.from_service_account_json('C:/Users/Tanay/Desktop/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json')
     response = client.recognize(config=config, audio=audio)
     for result in response.results:
         print(f"Transcript: {result.alternatives[0].transcript}")
 
 # Example usage:
 
-transcribe_audio('C:/Users/Pradeep Saxena/hello_world.wav')
+transcribe_audio('C:/Users/Tanay/Downloads/audio.mp3')
+
