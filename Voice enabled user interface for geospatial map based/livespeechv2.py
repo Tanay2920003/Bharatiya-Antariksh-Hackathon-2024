@@ -1,12 +1,13 @@
-#pip install pyaudio
-#pip install google-cloud-speech
+# pip install pyaudio google-cloud-speech
+
 import os
 import pyaudio
 import queue
+import threading
 from google.cloud import speech
 
 # Set up environment variable for authentication
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "C:/Users/Tanay/Desktop/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
 
 # Audio recording parameters
 RATE = 16000
@@ -84,7 +85,7 @@ def main():
 
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=,
+        sample_rate_hertz=RATE,
         language_code="en-US",
     )
 
@@ -98,9 +99,14 @@ def main():
         requests = (speech.StreamingRecognizeRequest(audio_content=content)
                     for content in audio_generator)
 
-        responses = client.streaming_recognize(streaming_config, requests)
+        # Create a thread to handle responses
+        response_thread = threading.Thread(target=listen_print_loop, args=(client.streaming_recognize(streaming_config, requests),))
+        response_thread.start()
 
-        listen_print_loop(responses)
+        try:
+            response_thread.join()
+        except KeyboardInterrupt:
+            print("Interrupted by user")
 
 if __name__ == "__main__":
     main()
