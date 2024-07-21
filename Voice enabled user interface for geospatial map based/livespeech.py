@@ -6,7 +6,7 @@ import queue
 from google.cloud import speech
 
 # Set up environment variable for authentication
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "C:/Users/Pradeep Saxena/Desktop/TeamHackathon/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
 
 # Audio recording parameters
 RATE = 16000
@@ -84,8 +84,8 @@ def main():
 
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=,
-        language_code="en-US",
+        sample_rate_hertz=RATE,
+        language_code="en-IN",
     )
 
     streaming_config = speech.StreamingRecognitionConfig(
