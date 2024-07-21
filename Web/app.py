@@ -10,7 +10,7 @@ def home():
 def get_data():
     # Example endpoint that returns JSON data
     data = {
-        "message": "Hello from Flask!",
+        "message": "Hello from GeoSage!",
         "status": "success"
     }
     return jsonify(data)
