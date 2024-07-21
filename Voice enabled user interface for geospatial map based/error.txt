@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "C:\Users\Pradeep Saxena\Desktop\TeamHackathon\Bharatiya-Antariksh-Hackathon-2024\Voice enabled user interface for geospatial map based\livespeech.py", line 106, in <module>
+    main()
+  File "C:\Users\Pradeep Saxena\Desktop\TeamHackathon\Bharatiya-Antariksh-Hackathon-2024\Voice enabled user interface for geospatial map based\livespeech.py", line 83, in main
+    client = speech.SpeechClient()
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\cloud\speech_v1\services\speech\client.py", line 692, in __init__
+    self._transport = transport_init(
+                      ^^^^^^^^^^^^^^^
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\cloud\speech_v1\services\speech\transports\grpc.py", line 154, in __init__
+    super().__init__(
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\cloud\speech_v1\services\speech\transports\base.py", line 100, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\auth\_default.py", line 657, in default
+    credentials, project_id = checker()
+                              ^^^^^^^^^
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\auth\_default.py", line 650, in <lambda>
+    lambda: _get_explicit_environ_credentials(quota_project_id=quota_project_id),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\auth\_default.py", line 270, in _get_explicit_environ_credentials
+    credentials, project_id = load_credentials_from_file(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pradeep Saxena\AppData\Roaming\Python\Python312\site-packages\google\auth\_default.py", line 114, in load_credentials_from_file
+    raise exceptions.DefaultCredentialsError(
+google.auth.exceptions.DefaultCredentialsError: File C:/Users/Tanay/Desktop/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json was not found.

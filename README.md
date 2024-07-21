@@ -1,7 +1,6 @@
 # Bharatiya Antariksh Hackathon 2024
-![img.png](img.png
+![logo](img.png)
+How to run
 
-HOw to run
-
--install requirements
-pip install -r requirements.txt
+install requirements: \
+run: pip install -r requirements.txt
