@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to Flask!</h1>
+
+    <form action="/submit" method="post">
+        <input type="text" name="username" placeholder="Enter your name" />
+        <input type="submit" value="Submit" />
+    </form>
+
+    <h2>API Data</h2>
+    <button id="fetchData">Fetch Data</button>
+    <pre id="dataOutput"></pre>
+
+    <script>
+        document.getElementById('fetchData').addEventListener('click', () => {
+            fetch('/api/data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('dataOutput').textContent = JSON.stringify(data, null, 2);
+                });
+        });
+    </script>
+</body>
+</html>
