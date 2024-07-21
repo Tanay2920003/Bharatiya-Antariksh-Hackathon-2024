@@ -87,23 +87,13 @@ def listen_print_loop(responses, language_code):
 def main():
     client = speech.SpeechClient()
 
-    # Create configurations for both languages
-    config_us = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=RATE,
-        language_code="en-US"
-    )
-
     config_in = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
         language_code="en-IN"
     )
 
-    streaming_config_us = speech.StreamingRecognitionConfig(
-        config=config_us,
-        interim_results=True
-    )
+
 
     streaming_config_in = speech.StreamingRecognitionConfig(
         config=config_in,
