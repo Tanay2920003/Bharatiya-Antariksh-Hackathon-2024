@@ -1,29 +1,66 @@
+/* General styling */
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* Light blue background */
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background for content */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    color: #0029f6;
+    color: #003366; /* Dark blue color */
 }
 
 form {
     margin-top: 20px;
 }
 
-input[type="text"] {
+.input-field {
     padding: 10px;
     margin-right: 10px;
+    border: 1px solid #003366; /* Dark blue border */
+    border-radius: 4px;
+    width: 200px;
 }
 
-input[type="submit"] {
+.submit-button {
     padding: 10px;
-    background-color: #007bff;
+    background-color: #003366; /* Dark blue background */
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
 }
 
-input[type="submit"]:hover {
-    background-color: #0056b3;
+.submit-button:hover {
+    background-color: #002244; /* Even darker blue for hover */
+}
+
+.fetch-button {
+    padding: 10px;
+    background-color: #003366; /* Dark blue background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fetch-button:hover {
+    background-color: #002244; /* Even darker blue for hover */
+}
+
+.data-output {
+    background-color: #e6f7ff; /* Light blue background for JSON output */
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #003366; /* Dark blue border */
+    white-space: pre-wrap; /* Preserve whitespace formatting */
 }
