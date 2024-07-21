@@ -1,4 +1,4 @@
-# pip install pyaudio google-cloud-speech
+
 
 import os
 import pyaudio
@@ -11,7 +11,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "C:/Users/Pradeep Saxena/Desktop/
 
 # Audio recording parameters
 RATE = 16000
-CHUNK = int(RATE / 5)  # 100ms
+CHUNK = int(RATE / 10)  # 100ms
 
 
 class MicrophoneStream:
@@ -91,7 +91,7 @@ def main():
     config_us = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
-        language_code="en-IN",
+        language_code="en-US"
     )
 
     config_in = speech.RecognitionConfig(
