@@ -87,13 +87,13 @@ def listen_print_loop(responses, language_code):
 def main():
     client = speech.SpeechClient()
 
+    # Create configurations for both languages
+
     config_in = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
         language_code="en-IN"
     )
-
-
 
     streaming_config_in = speech.StreamingRecognitionConfig(
         config=config_in,
@@ -104,26 +104,17 @@ def main():
         audio_generator = stream.generator()
 
         # Create requests for both configurations
-        requests_us = (speech.StreamingRecognizeRequest(audio_content=content)
-                       for content in audio_generator)
         requests_in = (speech.StreamingRecognizeRequest(audio_content=content)
                        for content in audio_generator)
 
         # Create threads for both language configurations
-        response_thread_us = threading.Thread(
-            target=listen_print_loop,
-            args=(client.streaming_recognize(streaming_config_us, requests_us), "en-US")
-        )
         response_thread_in = threading.Thread(
             target=listen_print_loop,
             args=(client.streaming_recognize(streaming_config_in, requests_in), "en-IN")
         )
-
-        response_thread_us.start()
         response_thread_in.start()
 
         try:
-            response_thread_us.join()
             response_thread_in.join()
         except KeyboardInterrupt:
             print("Interrupted by user")
