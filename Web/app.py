@@ -8,7 +8,6 @@ def home():
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
-    # Example endpoint that returns JSON data
     data = {
         "message": "Hello from GeoSage!",
         "status": "success"
@@ -17,7 +16,6 @@ def get_data():
 
 @app.route('/api/echo', methods=['POST'])
 def echo():
-    # Example POST endpoint that echoes back the data sent
     json_data = request.get_json()
     return jsonify(json_data)
 

@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-<title>Flask App</title>
-<link href="style.css" rel="stylesheet"/>
+    <title>Flask App</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"/>
 </head>
 <body>
-<div class="container">
-<h1>Welcome to Flask!</h1>
-<form action="/submit" class="form" method="post">
-<input class="input-field" name="username" placeholder="Enter your name" type="text"/>
-<input class="submit-button" type="submit" value="Submit"/>
-</form>
-<h2>API Data</h2>
-<button class="fetch-button" id="fetchData">Fetch Data</button>
-<pre class="data-output" id="dataOutput"></pre>
-</div>
- <script>
+    <div class="container">
+        <h1>Welcome to Flask!</h1>
+
+        <form action="/submit" class="form" method="post">
+            <input class="input-field" name="username" placeholder="Enter your name" type="text"/>
+            <input class="submit-button" type="submit" value="Submit"/>
+        </form>
+
+        <h2>API Data</h2>
+        <button class="fetch-button" id="fetchData">Fetch Data</button>
+        <pre class="data-output" id="dataOutput"></pre>
+    </div>
+    <script>
         document.getElementById('fetchData').addEventListener('click', () => {
             fetch('/api/data')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('dataOutput').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
                 });
         });
     </script>
-<p>This is a new paragraph added with BeautifulSoup.</p></body>
+</body>
 </html>
