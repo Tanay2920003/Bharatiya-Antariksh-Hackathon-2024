@@ -7,14 +7,17 @@ import threading
 from google.cloud import speech
 
 # Set up environment variable for authentication
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "C:/Users/Tanay/Desktop/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
+os.environ[
+    'GOOGLE_APPLICATION_CREDENTIALS'] = "C:/Users/Tanay/Desktop/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
 
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
 
+
 class MicrophoneStream:
     """Opens a recording stream as a generator yielding the audio chunks."""
+
     def __init__(self, rate, chunk):
         self._rate = rate
         self._chunk = chunk
@@ -67,7 +70,8 @@ class MicrophoneStream:
 
             yield b''.join(data)
 
-def listen_print_loop(responses):
+
+def listen_print_loop(responses, language_code):
     """Iterates through server responses and prints them."""
     for response in responses:
         if not response.results:
@@ -78,35 +82,63 @@ def listen_print_loop(responses):
             continue
 
         transcript = result.alternatives[0].transcript
-        print(f'Transcript: {transcript}')
+        print(f'Transcript ({language_code}): {transcript}')
+
 
 def main():
     client = speech.SpeechClient()
 
-    config = speech.RecognitionConfig(
+    # Create configurations for both languages
+    config_us = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
-        language_code="en-IN",
+        language_code="en-US"
     )
 
-    streaming_config = speech.StreamingRecognitionConfig(
-        config=config,
+    config_in = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=RATE,
+        language_code="en-IN"
+    )
+
+    streaming_config_us = speech.StreamingRecognitionConfig(
+        config=config_us,
+        interim_results=True
+    )
+
+    streaming_config_in = speech.StreamingRecognitionConfig(
+        config=config_in,
         interim_results=True
     )
 
     with MicrophoneStream(RATE, CHUNK) as stream:
         audio_generator = stream.generator()
-        requests = (speech.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator)
 
-        # Create a thread to handle responses
-        response_thread = threading.Thread(target=listen_print_loop, args=(client.streaming_recognize(streaming_config, requests),))
-        response_thread.start()
+        # Create requests for both configurations
+        requests_us = (speech.StreamingRecognizeRequest(audio_content=content)
+                       for content in audio_generator)
+        requests_in = (speech.StreamingRecognizeRequest(audio_content=content)
+                       for content in audio_generator)
+
+        # Create threads for both language configurations
+        response_thread_us = threading.Thread(
+            target=listen_print_loop,
+            args=(client.streaming_recognize(streaming_config_us, requests_us), "en-US")
+        )
+        response_thread_in = threading.Thread(
+            target=listen_print_loop,
+            args=(client.streaming_recognize(streaming_config_in, requests_in), "en-IN")
+        )
+
+        response_thread_us.start()
+        response_thread_in.start()
 
         try:
-            response_thread.join()
+            response_thread_us.join()
+            response_thread_in.join()
         except KeyboardInterrupt:
             print("Interrupted by user")
+
 
 if __name__ == "__main__":
     main()
