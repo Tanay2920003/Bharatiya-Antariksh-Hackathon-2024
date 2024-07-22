@@ -22,7 +22,7 @@ def echo():
 @app.route('/submit', methods=['POST'])
 def submit():
     username = request.form.get('username')
-    return f"Hello, {username}!"
+    return f"Hi, {username}!"
 
 if __name__ == '__main__':
     app.run(debug=True)

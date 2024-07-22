@@ -7,7 +7,7 @@ import threading
 from google.cloud import speech
 
 # Set up environment variable for authentication
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "C:/Users/Pradeep Saxena/Desktop/TeamHackathon/Bharatiya-Antariksh-Hackathon-2024/Voice enabled user interface for geospatial map based/hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "hybrid-sunbeam-429814-a0-7aae21dccd0b.json"
 
 # Audio recording parameters
 RATE = 16000
