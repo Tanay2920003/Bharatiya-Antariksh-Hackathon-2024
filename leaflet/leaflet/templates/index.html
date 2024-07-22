@@ -20,14 +20,14 @@
 
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
     <script>
-        var map = L.map('map').setView([26.8, 80.9], 11);
+        var map = L.map('map').setView([20.59, 78.96], 5);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 18,
         }).addTo(map);
-          var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/sisdpv2/wms", {
-    layers: 'UP_Lucknow_lulc_v2',
+          var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+    layers: 'LULC250K_2223',
     format: 'image/png',
     transparent: true,
     attribution: 'Bhoonidhi/Bhuvan WMS service'

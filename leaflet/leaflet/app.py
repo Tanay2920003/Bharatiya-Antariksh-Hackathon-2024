@@ -4,9 +4,9 @@ app = Flask(__name__)
 
 # Example data (replace with your dynamic data source)
 markers = [
-    {"name": "Ambedkar Memorial Park", "lat": 26.8500, "lng": 80.9499},
-    {"name": "Chota Imambara (Hussainabad Imambara)", "lat": 26.8696, "lng": 80.9147},
-    {"name": "Lucknow City Center (Hazratganj)", "lat": 26.8465108, "lng": 80.9466832}
+    {"name": "New Delhi, India", "lat": 28.6790, "lng": 77.0697},
+    {"name": "Mumbai (Bombay), India", "lat": 19.0760, "lng": 72.8777},
+    {"name": "Lucknow, India", "lat": 26.8500, "lng": 80.9499}
 ]
 
 @app.route('/')
