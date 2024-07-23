@@ -21,7 +21,7 @@
             width: 100%;
             position: relative;
         }
-        .button-container, .search-container {
+        .button-container, .search-container , .grid-button-container {
             position: absolute;
             z-index: 1000;
         }
@@ -34,7 +34,18 @@
             left: 10px;
             right: 10px;
         }
-        .button-container button, .search-container input {
+        .grid-button-container {
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+
+        .grid-button-container {
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+        .button-container button, .search-container input , .grid-button-container button  {
             padding: 10px;
             font-size: 16px;
             border: none;
@@ -54,6 +65,13 @@
             box-sizing: border-box;
             font-size: 16px;
         }
+        .grid-button-container button {
+            background-color: #007BFF;
+            color: white;
+        }
+        .grid-button-container button:hover {
+            background-color: #0056b3;
+        }
         /* Custom CSS for the scale control */
         .leaflet-control-scale {
             position: absolute;
@@ -72,6 +90,9 @@
     </div>
 
     <div id="map"></div>
+    <div class="grid-button-container">
+        <button onclick="toggleBackground()">☰</button> <!-- Grid icon -->
+    </div>
     <div class="button-container">
         <button onclick="toggleLayer()">Toggle Bhoonidhi Layer</button>
     </div>
@@ -206,6 +227,14 @@
                     }, 1000); // 1 second delay
                 }
             }, zoomInterval);
+        }
+        function toggleBackground() {
+            var mapElement = document.getElementById('map');
+            if (mapElement.style.background === 'black') {
+                mapElement.style.background = '#ddd';
+            } else {
+                mapElement.style.background = 'black';
+            }
         }
 
         // Add scale control to the bottom right of the map
