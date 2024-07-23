@@ -50,7 +50,7 @@
         }
         .search-container input {
             width: 95%;
-            margin-left: 40px;
+            margin-left: 30px;
             box-sizing: border-box;
             font-size: 16px;
         }
@@ -67,10 +67,11 @@
     </style>
 </head>
 <body>
-    <div id="map"></div>
     <div class="search-container">
         <input id="searchInput" type="text" placeholder="Search for a place or coordinates..." onkeydown="if(event.key === 'Enter'){search();}">
     </div>
+
+    <div id="map"></div>
     <div class="button-container">
         <button onclick="toggleLayer()">Toggle Bhoonidhi Layer</button>
     </div>
