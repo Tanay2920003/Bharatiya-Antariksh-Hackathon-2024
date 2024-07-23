@@ -21,7 +21,7 @@
             width: 100%;
             position: relative;
         }
-        .button-container, .search-container , .grid-button-container {
+        .button-container, .search-container, .grid-button-container {
             position: absolute;
             z-index: 1000;
         }
@@ -39,7 +39,7 @@
             right: 25px;
             transform: translateY(-50%);
         }
-        .button-container button, .search-container input , .grid-button-container button  {
+        .button-container button, .search-container input, .grid-button-container button {
             padding: 10px;
             font-size: 16px;
             border: none;
@@ -56,7 +56,7 @@
         .search-container input {
             width: 95%;
             margin-left: 30px;
-            border-radius:40px;
+            border-radius: 40px;
             box-sizing: border-box;
             font-size: 16px;
         }
@@ -77,6 +77,42 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
+        /* Styles for dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            bottom: 100%; /* Position the dropdown above the button */
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .dropdown-content button {
+            display: block;
+            width: 100%;
+            border: none;
+            padding: 10px;
+            text-align: left;
+            background-color: #007BFF;
+            color: white;
+            border-bottom: 1px solid #0056b3;
+            cursor: pointer;
+        }
+        .dropdown-content button:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -89,7 +125,15 @@
         <button onclick="toggleBackground()">☰</button> <!-- Grid icon -->
     </div>
     <div class="button-container">
-        <button onclick="toggleLayer()">Toggle Bhoonidhi Layer</button>
+        <div class="dropdown">
+            <button onclick="toggleDropdown()">Toggle Bhuvan Layer</button>
+            <div class="dropdown-content">
+                <button onclick="toggleLayer('forest')">Forest Cover</button>
+                <button onclick="toggleLayer('flood')">Flood Hazard</button>
+                <button onclick="toggleLayer('land')">Land Use</button>
+                <!-- Add more options here as needed -->
+            </div>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
@@ -101,81 +145,42 @@
             maxZoom: 18,
         }).addTo(map);
 
-        var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
-            layers: 'LULC250K_2223',
-            format: 'image/png',
-            transparent: true,
-            attribution: 'Bhoonidhi/Bhuvan WMS service'
-        });
+        var layers = {
+            forest: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+                layers: 'Forest',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Forest Cover Layer'
+            }),
+            flood: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+                layers: 'Flood',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Flood Hazard Layer'
+            }),
+            land: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+                layers: 'Land',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Land Use Layer'
+            }),
+            // Add more layers as needed
+        };
 
-        var marker;  // Variable to store the marker
-        var customIcon = L.icon({
-            iconUrl: '{{ url_for('static', filename='images/marker2x.png') }}',  // Path to your custom icon
-            iconSize: [38, 60],                // Size of the icon
-            iconAnchor: [19, 60],              // Anchor point of the icon
-            popupAnchor: [0, -60]              // Anchor point of the popup relative to the icon
-        });
+        var currentLayer = null;
 
-        function fetchMarkers() {
-            fetch('/api/markers')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(markerData => {
-                        // Add a marker with the custom icon
-                        var popupContent = `<b>${markerData.name}</b><br>Latitude: ${markerData.lat}<br>Longitude: ${markerData.lng}`;
-                        L.marker([markerData.lat, markerData.lng], { icon: customIcon }).bindPopup(popupContent).addTo(map);
-                    });
-                });
+        function toggleDropdown() {
+            // Dropdown already handled by CSS hover effect
         }
 
-        // Call fetchMarkers function to load markers
-        fetchMarkers();
-
-        // Variable to keep track of the layer visibility
-        var layerVisible = false; // Start with the layer off
-
-        function toggleLayer() {
-            if (layerVisible) {
-                setTimeout(() => {
-                    map.removeLayer(bhoonidhiLayer);
-                }, 1000); // Delay of 1 second
-            } else {
-                setTimeout(() => {
-                    map.addLayer(bhoonidhiLayer);
-                }, 1000); // Delay of 1 second
-            }
-            layerVisible = !layerVisible;
-        }
-        function search() {
-            var query = document.getElementById('searchInput').value;
-            var url;
-
-            if (query.trim() === '') {
-                alert('Please enter a search term.');
-                return;
+        function toggleLayer(layerType) {
+            if (currentLayer) {
+                map.removeLayer(currentLayer);
             }
 
-            // Check if the query is a coordinate or a place name
-            if (/^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(query)) {
-                // If it's a coordinate
-                var coords = query.split(',').map(coord => parseFloat(coord.trim()));
-                var lat = coords[0];
-                var lng = coords[1];
-                zoomToLocation([lat, lng]);
-            } else {
-                // If it's a place name, use Nominatim API to get coordinates
-                url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            var lat = data[0].lat;
-                            var lng = data[0].lon;
-                            zoomToLocation([lat, lng]);
-                        } else {
-                            alert('No results found for the search term.');
-                        }
-                    });
+            if (layerType && layers[layerType]) {
+                currentLayer = layers[layerType];
+                currentLayer.addTo(map);
             }
         }
 
@@ -255,6 +260,7 @@
                 }
             }, zoomInterval);
         }
+
         function toggleBackground() {
             var mapElement = document.getElementById('map');
             if (mapElement.style.background === 'black') {
@@ -270,6 +276,18 @@
             maxWidth: 200,
             imperial: false // This shows the scale in metric units
         }).addTo(map);
+
+        function option1() {
+            alert('Option 1 selected');
+        }
+
+        function option2() {
+            alert('Option 2 selected');
+        }
+
+        function option3() {
+            alert('Option 3 selected');
+        }
     </script>
 </body>
 </html>
