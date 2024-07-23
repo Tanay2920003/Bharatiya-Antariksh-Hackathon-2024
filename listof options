@@ -14,3 +14,19 @@ flood annual layers
         url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe
         layername:br_fld_2010
 
+<<<<<<< Updated upstream
+=======
+flood annual layers>Assam and
+                   > bihar
+
+
+land> "https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe
+
+>Assam
+        url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe
+        layername:as_fld_2010
+    > bihar
+        url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe
+        layername:br_fld_2010
+
+>>>>>>> Stashed changes
