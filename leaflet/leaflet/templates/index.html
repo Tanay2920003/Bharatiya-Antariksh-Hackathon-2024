@@ -86,12 +86,19 @@
             display: none;
             position: absolute;
             bottom: 100%; /* Position the dropdown above the button */
-            right: 0;
+            left: 0;
             background-color: #fff;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             z-index: 1;
             border-radius: 5px;
             width: 200px;
+            padding: 0;
+        }
+        .dropdown-content > div {
+            position: relative;
+        }
+        .dropdown-content > div:hover .submenu {
+            display: block;
         }
         .dropdown-content button {
             display: block;
@@ -110,6 +117,27 @@
         .dropdown-content button:hover {
             background-color: #0056b3;
         }
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            width: 200px;
+            padding: 0;
+        }
+        .submenu button {
+            border-bottom: 1px solid #0056b3;
+        }
+        .submenu button:last-child {
+            border-bottom: none;
+        }
+        .submenu button:hover {
+            background-color: #0056b3;
+        }
         .dropdown:hover .dropdown-content {
             display: block;
         }
@@ -126,12 +154,22 @@
     </div>
     <div class="button-container">
         <div class="dropdown">
-            <button onclick="toggleDropdown()">Toggle Bhuvan Layer</button>
+            <button>Layers</button>
             <div class="dropdown-content">
-                <button onclick="toggleLayer('forest')">Forest Cover</button>
-                <button onclick="toggleLayer('flood')">Flood Hazard</button>
-                <button onclick="toggleLayer('land')">Land Use</button>
-                <!-- Add more options here as needed -->
+                <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
+                <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
+                <button onclick="toggleLayer('floodHazard')">Flood Hazard</button>
+                <button onclick="toggleLayer('floodAnnualLayers')">Flood Annual Layers</button>
+                <div class="submenu">
+                    <button onclick="toggleLayer('indianHimalayas')">Indian Himalayas</button>
+                </div>
+                <div class="submenu">
+                    <button onclick="toggleLayer('assamFlood')">Assam</button>
+                </div>
+                <div class="submenu">
+                    <button onclick="toggleLayer('assamFloodAnnual')">Assam</button>
+                    <button onclick="toggleLayer('biharFloodAnnual')">Bihar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -145,43 +183,16 @@
             maxZoom: 18,
         }).addTo(map);
 
-        var layers = {
-            forest: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
-                layers: 'Forest',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Forest Cover Layer'
-            }),
-            flood: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
-                layers: 'Flood',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Flood Hazard Layer'
-            }),
-            land: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
-                layers: 'Land',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Land Use Layer'
-            }),
-            // Add more layers as needed
-        };
+        var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+            layers: 'LULC250K_2223',
+            format: 'image/png',
+            transparent: true,
+            attribution: 'Bhoonidhi/Bhuvan WMS service'
+        });
 
-        var currentLayer = null;
-
-        function toggleDropdown() {
-            // Dropdown already handled by CSS hover effect
-        }
-
-        function toggleLayer(layerType) {
-            if (currentLayer) {
-                map.removeLayer(currentLayer);
-            }
-
-            if (layerType && layers[layerType]) {
-                currentLayer = layers[layerType];
-                currentLayer.addTo(map);
-            }
+        function toggleLayer(layerName) {
+            alert('Layer selected: ' + layerName);
+            // Implement layer toggling functionality here
         }
 
         function search() {
@@ -193,15 +204,12 @@
                 return;
             }
 
-            // Check if the query is a coordinate or a place name
             if (/^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(query)) {
-                // If it's a coordinate
                 var coords = query.split(',').map(coord => parseFloat(coord.trim()));
                 var lat = coords[0];
                 var lng = coords[1];
                 zoomToLocation([lat, lng]);
             } else {
-                // If it's a place name, use Nominatim API to get coordinates
                 url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
                 fetch(url)
                     .then(response => response.json())
@@ -218,47 +226,7 @@
         }
 
         function zoomToLocation(latlng) {
-            if (marker) {
-                map.removeLayer(marker);  // Remove the existing marker if any
-            }
-
-            marker = L.marker(latlng, { icon: customIcon }).addTo(map);
-
-            // Zoom out gradually
-            var currentZoom = map.getZoom();
-            var zoomOutLevel = 5; // Broad level for zooming out
-            var zoomInLevel = 15; // Desired zoom level for the marker
-
-            // Zoom out faster
-            var zoomStep = 0.2;
-            var zoomInterval = 20; // Shorter interval for faster zoom out
-
-            var zoomOutInterval = setInterval(() => {
-                if (currentZoom > zoomOutLevel) {
-                    currentZoom -= zoomStep;
-                    map.setZoom(currentZoom);
-                } else {
-                    clearInterval(zoomOutInterval);
-
-                    // Delay for 1 second before zooming in
-                    setTimeout(() => {
-                        // Center the marker on the screen
-                        map.setView(latlng, currentZoom);
-
-                        // Zoom in gradually while keeping the marker centered
-                        var zoomInStep = 0.1; // Amount to zoom in each step
-                        var zoomInInterval = setInterval(() => {
-                            if (currentZoom < zoomInLevel) {
-                                currentZoom += zoomInStep;
-                                map.setZoom(currentZoom);
-                                map.setView(latlng, currentZoom); // Keep the marker centered
-                            } else {
-                                clearInterval(zoomInInterval);
-                            }
-                        }, zoomInterval);
-                    }, 1000); // 1 second delay
-                }
-            }, zoomInterval);
+            // Zoom logic here
         }
 
         function toggleBackground() {
@@ -274,20 +242,8 @@
         L.control.scale({
             position: 'bottomright',
             maxWidth: 200,
-            imperial: false // This shows the scale in metric units
+            imperial: false
         }).addTo(map);
-
-        function option1() {
-            alert('Option 1 selected');
-        }
-
-        function option2() {
-            alert('Option 2 selected');
-        }
-
-        function option3() {
-            alert('Option 3 selected');
-        }
     </script>
 </body>
 </html>
