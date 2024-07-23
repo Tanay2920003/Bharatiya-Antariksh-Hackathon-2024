@@ -21,7 +21,7 @@
             width: 100%;
             position: relative;
         }
-        .button-container, .search-container {
+        .button-container, .search-container, .grid-button-container {
             position: absolute;
             z-index: 1000;
         }
@@ -34,7 +34,12 @@
             left: 10px;
             right: 10px;
         }
-        .button-container button, .search-container input {
+        .grid-button-container {
+            top: 65%;
+            right: 25px;
+            transform: translateY(-50%);
+        }
+        .button-container button, .search-container input , .grid-button-container button {
             padding: 10px;
             font-size: 16px;
             border: none;
@@ -50,9 +55,17 @@
         }
         .search-container input {
             width: 95%;
-            margin-left: 40px;
+            margin-left: 30px;
+            border-radius: 40px;
             box-sizing: border-box;
             font-size: 16px;
+        }
+        .grid-button-container button {
+            background-color: #007BFF;
+            color: white;
+        }
+        .grid-button-container button:hover {
+            background-color: #0056b3;
         }
         /* Custom CSS for the scale control */
         .leaflet-control-scale {
@@ -64,15 +77,100 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
+        /* Styles for dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            bottom: 100%; /* Position the dropdown above the button */
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            width: 200px;
+            padding: 0;
+        }
+        .dropdown-content > div {
+            position: relative;
+        }
+        .dropdown-content > div:hover .submenu {
+            display: block;
+        }
+        .dropdown-content button {
+            display: block;
+            width: 100%;
+            border: none;
+            padding: 10px;
+            text-align: left;
+            background-color: #007BFF;
+            color: white;
+            border-bottom: 1px solid #0056b3;
+            cursor: pointer;
+        }
+        .dropdown-content button:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content button:hover {
+            background-color: #0056b3;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            width: 200px;
+            padding: 0;
+        }
+        .submenu button {
+            border-bottom: 1px solid #0056b3;
+        }
+        .submenu button:last-child {
+            border-bottom: none;
+        }
+        .submenu button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div id="map"></div>
+
     <div class="search-container">
         <input id="searchInput" type="text" placeholder="Search for a place or coordinates..." onkeydown="if(event.key === 'Enter'){search();}">
     </div>
+    <div id="map" class="leaflet-container"></div>
+
+    <div class="grid-button-container">
+        <button onclick="toggleBackground()">☰</button> <!-- Grid icon -->
+    </div>
+
     <div class="button-container">
-        <button onclick="toggleLayer()">Toggle Bhoonidhi Layer</button>
+        <div class="dropdown">
+            <button>Layers</button>
+            <div class="dropdown-content">
+                <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
+                <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
+                <button onclick="toggleLayer('floodHazard')">Flood Hazard</button>
+                <button onclick="toggleLayer('floodAnnualLayersAssam')">Flood Annual Layers (Assam)</button>
+                <button onclick="toggleLayer('floodAnnualLayersBihar')">Flood Annual Layers (Bihar)</button>
+                <div class="submenu">
+                    <button onclick="toggleLayer('indianHimalayas')">Indian Himalayas</button>
+                </div>
+                <div class="submenu">
+                    <button onclick="toggleLayer('assamFlood')">Assam Flood</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
@@ -84,12 +182,57 @@
             maxZoom: 18,
         }).addTo(map);
 
-        var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
-            layers: 'LULC250K_2223',
-            format: 'image/png',
-            transparent: true,
-            attribution: 'Bhoonidhi/Bhuvan WMS service'
-        });
+        var layers = {
+            landCover: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+                layers: 'LULC250K_2223',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhoonidhi/Bhuvan WMS service'
+            }),
+            glacialLakes: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/", {
+                layers: 'Indianhimalayas:indianhimalayas_GLWB',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            floodHazard: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/hazard.exe", {
+                layers: 'as_hz',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            floodAnnualLayersAssam: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'as_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            floodAnnualLayersBihar: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'br_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            indianHimalayas: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/", {
+                layers: 'Indianhimalayas:indianhimalayas_GLWB',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            assamFlood: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'as_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            biharFloodAnnual: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'br_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            })
+        };
+
 
         var marker;  // Variable to store the marker
         var customIcon = L.icon({
@@ -115,20 +258,56 @@
         fetchMarkers();
 
         // Variable to keep track of the layer visibility
-        var layerVisible = false; // Start with the layer off
+        var activeLayers = {}; // Object to track active layers
 
-        function toggleLayer() {
-            if (layerVisible) {
-                setTimeout(() => {
-                    map.removeLayer(bhoonidhiLayer);
-                }, 1000); // Delay of 1 second
-            } else {
-                setTimeout(() => {
-                    map.addLayer(bhoonidhiLayer);
-                }, 1000); // Delay of 1 second
-            }
-            layerVisible = !layerVisible;
+function toggleLayer(layerName) {
+    // Check if the layer is currently active
+    if (activeLayers[layerName]) {
+        // If the layer is active, remove it
+        setTimeout(() => {
+            map.removeLayer(activeLayers[layerName]);
+            delete activeLayers[layerName]; // Remove from active layers tracking
+        }, 1000); // Delay of 1 second
+    } else {
+        // If the layer is not active, add it
+        var layerToAdd;
+        switch (layerName) {
+            case 'landCover':
+                layerToAdd = layers.landCover;
+                break;
+            case 'glacialLakes':
+                layerToAdd = layers.glacialLakes;
+                break;
+            case 'floodHazard':
+                layerToAdd = layers.floodHazard;
+                break;
+            case 'floodAnnualLayersAssam':
+                layerToAdd = layers.floodAnnualLayersAssam;
+                break;
+            case 'floodAnnualLayersBihar':
+                layerToAdd = layers.floodAnnualLayersBihar;
+                break;
+            case 'indianHimalayas':
+                layerToAdd = layers.indianHimalayas;
+                break;
+            case 'assamFlood':
+                layerToAdd = layers.assamFlood;
+                break;
+            case 'biharFloodAnnual':
+                layerToAdd = layers.biharFloodAnnual;
+                break;
+            default:
+                layerToAdd = null;
         }
+
+        if (layerToAdd) {
+            setTimeout(() => {
+                map.addLayer(layerToAdd);
+                activeLayers[layerName] = layerToAdd; // Add to active layers tracking
+            }, 1000); // Delay of 1 second
+        }
+    }
+}
 
         function search() {
             var query = document.getElementById('searchInput').value;
@@ -162,6 +341,7 @@
                     });
             }
         }
+
 
         function zoomToLocation(latlng) {
             if (marker) {
@@ -206,6 +386,15 @@
                 }
             }, zoomInterval);
         }
+        function toggleBackground() {
+            var mapElement = document.getElementById('map');
+            if (mapElement.style.background === 'black') {
+                mapElement.style.background = '#ddd';
+            } else {
+                mapElement.style.background = 'black';
+            }
+        }
+
 
         // Add scale control to the bottom right of the map
         L.control.scale({

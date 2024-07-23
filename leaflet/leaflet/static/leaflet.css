@@ -258,8 +258,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
 /* visual tweaks */
 
 .leaflet-container {
-	background: #ddd;
+	background: #ffffff;
 	outline-offset: 1px;
+
 	}
 .leaflet-container a {
 	color: #0078A8;
@@ -283,34 +284,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
 /* general toolbar styles */
 
 .leaflet-bar {
-
-	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-    border-radius: 4px;
-    position: absolute;
-    top: 300px;
-
-
-
-
+	position: fixed; /* Fix the position relative to the viewport */
+    right: 25px; /* Position 10 pixels from the right edge */
+    top: 50%; /* Position at the vertical center of the viewport */
+    transform: translateY(-50%); /* Center the bar vertically */
+    z-index: 1000; /* Ensure it's above other elements */
 	}
 .leaflet-bar a {
-	background-color: #fff;
-	border-bottom: 1px solid #ccc;
-	width: 26px;
-	height: 26px;
-	line-height: 26px;
-	display: block;
-	text-align: center;
-	text-decoration: none;
-	color: black;
-
+	background-color: #ffffff;
+    border-bottom: 1px solid #0033ed;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
 	}
 .leaflet-bar a,
 .leaflet-control-layers-toggle {
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	display: block;
-
 	}
 .leaflet-bar a:hover,
 .leaflet-bar a:focus {
@@ -362,7 +357,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 .leaflet-control-layers {
 	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-	background: #fff;
+	background: #ffffff;
 	border-radius: 5px;
 	}
 .leaflet-control-layers-toggle {
@@ -389,7 +384,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-control-layers-expanded {
 	padding: 6px 10px 6px 6px;
 	color: #333;
-	background: #fff;
+	background: #ffffff;
 	}
 .leaflet-control-layers-scrollbar {
 	overflow-y: scroll;
@@ -421,7 +416,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 /* attribution and scale controls */
 
 .leaflet-container .leaflet-control-attribution {
-	background: #fff;
+	background: #ffffff;
 	background: rgba(255, 255, 255, 0.8);
 	margin: 0;
 	}
@@ -458,7 +453,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	white-space: nowrap;
 	-moz-box-sizing: border-box;
 	     box-sizing: border-box;
-	background: rgba(255, 255, 255, 0.8);
+	background: rgba(249, 249, 249, 0.8);
 	text-shadow: 1px 1px #fff;
 	}
 .leaflet-control-scale-line:not(:first-child) {
