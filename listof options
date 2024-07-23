@@ -1,6 +1,16 @@
 land cover land use
+    alredy
 glacial lakes/water bodies> Indian himalyas
+    url:https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/
+    layer name:Indianhimalayas:indianhimalayas_GLWB
 flood  hazard>Assam
+    url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/hazard.exe
+    layername:as_hz
+flood annual layers
+>Assam
+    url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe
+    layername:as_fld_2010
+> bihar
+    url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe
+    layername:br_fld_2010
 
-flood annual layers>Assam and
-                   > bihar
