@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 # Example data (replace with your dynamic data source)
 markers = [
-    {"name": "New Delhi, India", "lat": 28.6790, "lng": 77.0697},
+
 
 ]
 

@@ -21,28 +21,55 @@
             width: 100%;
             position: relative;
         }
-        .button-container {
+        .button-container, .search-container {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
             z-index: 1000;
         }
-        .button-container button {
-            padding: 10px 20px;
+        .button-container {
+            bottom: 10px;
+            left: 10px;
+        }
+        .search-container {
+            top: 10px;
+            left: 10px;
+            right: 10px;
+        }
+        .button-container button, .search-container input {
+            padding: 10px;
             font-size: 16px;
-            background-color: #007BFF;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
+        .button-container button {
+            background-color: #007BFF;
+            color: white;
+        }
         .button-container button:hover {
             background-color: #0056b3;
+        }
+        .search-container input {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        /* Custom CSS for the scale control */
+        .leaflet-control-scale {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    <div class="search-container">
+        <input id="searchInput" type="text" placeholder="Search for a place or coordinates..." onkeydown="if(event.key === 'Enter'){search();}">
+    </div>
     <div class="button-container">
         <button onclick="toggleLayer()">Toggle Bhoonidhi Layer</button>
     </div>
@@ -61,40 +88,130 @@
             format: 'image/png',
             transparent: true,
             attribution: 'Bhoonidhi/Bhuvan WMS service'
-        }).addTo(map);
+        });
+
+        var marker;  // Variable to store the marker
+        var customIcon = L.icon({
+            iconUrl: '{{ url_for('static', filename='images/marker2x.png') }}',  // Path to your custom icon
+            iconSize: [38, 60],                // Size of the icon
+            iconAnchor: [19, 60],              // Anchor point of the icon
+            popupAnchor: [0, -60]              // Anchor point of the popup relative to the icon
+        });
 
         function fetchMarkers() {
             fetch('/api/markers')
                 .then(response => response.json())
                 .then(data => {
-                    data.forEach(marker => {
-                        var customIcon = L.icon({
-                            iconUrl: '{{ url_for('static', filename='images/marker2x.png') }}',  // Path to your custom icon
-                            iconSize: [38, 60],                // Size of the icon
-                            iconAnchor: [19, 60],              // Anchor point of the icon
-                            popupAnchor: [-0, -60]             // Anchor point of the popup relative to the icon
-                        });
-
+                    data.forEach(markerData => {
                         // Add a marker with the custom icon
-                        var popupContent = `<b>${marker.name}</b><br>Latitude: ${marker.lat}<br>Longitude: ${marker.lng}`;
-                        L.marker([marker.lat, marker.lng], { icon: customIcon }).bindPopup(popupContent).addTo(map);
+                        var popupContent = `<b>${markerData.name}</b><br>Latitude: ${markerData.lat}<br>Longitude: ${markerData.lng}`;
+                        L.marker([markerData.lat, markerData.lng], { icon: customIcon }).bindPopup(popupContent).addTo(map);
                     });
                 });
         }
 
         // Call fetchMarkers function to load markers
         fetchMarkers();
-        var layerVisible = true;
+
+        // Variable to keep track of the layer visibility
+        var layerVisible = false; // Start with the layer off
 
         function toggleLayer() {
             if (layerVisible) {
-                map.removeLayer(bhoonidhiLayer);
+                setTimeout(() => {
+                    map.removeLayer(bhoonidhiLayer);
+                }, 1000); // Delay of 1 second
             } else {
-                map.addLayer(bhoonidhiLayer);
+                setTimeout(() => {
+                    map.addLayer(bhoonidhiLayer);
+                }, 1000); // Delay of 1 second
             }
             layerVisible = !layerVisible;
         }
 
+        function search() {
+            var query = document.getElementById('searchInput').value;
+            var url;
+
+            if (query.trim() === '') {
+                alert('Please enter a search term.');
+                return;
+            }
+
+            // Check if the query is a coordinate or a place name
+            if (/^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(query)) {
+                // If it's a coordinate
+                var coords = query.split(',').map(coord => parseFloat(coord.trim()));
+                var lat = coords[0];
+                var lng = coords[1];
+                zoomToLocation([lat, lng]);
+            } else {
+                // If it's a place name, use Nominatim API to get coordinates
+                url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            var lat = data[0].lat;
+                            var lng = data[0].lon;
+                            zoomToLocation([lat, lng]);
+                        } else {
+                            alert('No results found for the search term.');
+                        }
+                    });
+            }
+        }
+
+        function zoomToLocation(latlng) {
+            if (marker) {
+                map.removeLayer(marker);  // Remove the existing marker if any
+            }
+
+            marker = L.marker(latlng, { icon: customIcon }).addTo(map);
+
+            // Zoom out gradually
+            var currentZoom = map.getZoom();
+            var zoomOutLevel = 5; // Broad level for zooming out
+            var zoomInLevel = 15; // Desired zoom level for the marker
+
+            // Zoom out faster
+            var zoomStep = 0.2;
+            var zoomInterval = 20; // Shorter interval for faster zoom out
+
+            var zoomOutInterval = setInterval(() => {
+                if (currentZoom > zoomOutLevel) {
+                    currentZoom -= zoomStep;
+                    map.setZoom(currentZoom);
+                } else {
+                    clearInterval(zoomOutInterval);
+
+                    // Delay for 1 second before zooming in
+                    setTimeout(() => {
+                        // Center the marker on the screen
+                        map.setView(latlng, currentZoom);
+
+                        // Zoom in gradually while keeping the marker centered
+                        var zoomInStep = 0.1; // Amount to zoom in each step
+                        var zoomInInterval = setInterval(() => {
+                            if (currentZoom < zoomInLevel) {
+                                currentZoom += zoomInStep;
+                                map.setZoom(currentZoom);
+                                map.setView(latlng, currentZoom); // Keep the marker centered
+                            } else {
+                                clearInterval(zoomInInterval);
+                            }
+                        }, zoomInterval);
+                    }, 1000); // 1 second delay
+                }
+            }, zoomInterval);
+        }
+
+        // Add scale control to the bottom right of the map
+        L.control.scale({
+            position: 'bottomright',
+            maxWidth: 200,
+            imperial: false // This shows the scale in metric units
+        }).addTo(map);
     </script>
 </body>
 </html>
