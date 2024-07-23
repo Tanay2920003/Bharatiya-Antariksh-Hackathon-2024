@@ -177,10 +177,12 @@
     <script>
         var map = L.map('map').setView([20.59, 78.96], 5);
 
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 18,
         }).addTo(map);
+
 
         var layers = {
             landCover: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
