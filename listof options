@@ -20,8 +20,12 @@ flood annual layers>Assam and
                    > bihar
 
 
-land> "https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe
-
+var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+            layers: 'LULC250K_2223',
+            format: 'image/png',
+            transparent: true,
+            attribution: 'Bhoonidhi/Bhuvan WMS service'
+        });
 >Assam
         url:https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe
         layername:as_fld_2010

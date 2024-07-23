@@ -159,16 +159,13 @@
                 <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
                 <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
                 <button onclick="toggleLayer('floodHazard')">Flood Hazard</button>
-                <button onclick="toggleLayer('floodAnnualLayers')">Flood Annual Layers</button>
+                <button onclick="toggleLayer('floodAnnualLayersAssam')">Flood Annual Layers (Assam)</button>
+                <button onclick="toggleLayer('floodAnnualLayersBihar')">Flood Annual Layers (Bihar)</button>
                 <div class="submenu">
                     <button onclick="toggleLayer('indianHimalayas')">Indian Himalayas</button>
                 </div>
                 <div class="submenu">
-                    <button onclick="toggleLayer('assamFlood')">Assam</button>
-                </div>
-                <div class="submenu">
-                    <button onclick="toggleLayer('assamFloodAnnual')">Assam</button>
-                    <button onclick="toggleLayer('biharFloodAnnual')">Bihar</button>
+                    <button onclick="toggleLayer('assamFlood')">Assam Flood</button>
                 </div>
             </div>
         </div>
@@ -183,16 +180,96 @@
             maxZoom: 18,
         }).addTo(map);
 
-        var bhoonidhiLayer = L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
-            layers: 'LULC250K_2223',
-            format: 'image/png',
-            transparent: true,
-            attribution: 'Bhoonidhi/Bhuvan WMS service'
-        });
+        var layers = {
+            landCover: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/LULC250K.exe", {
+                layers: 'LULC250K_2223',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhoonidhi/Bhuvan WMS service'
+            }),
+            glacialLakes: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/", {
+                layers: 'Indianhimalayas:indianhimalayas_GLWB',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            floodHazard: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/hazard.exe", {
+                layers: 'as_hz',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            floodAnnualLayersAssam: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'as_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            floodAnnualLayersBihar: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'br_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            indianHimalayas: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/", {
+                layers: 'Indianhimalayas:indianhimalayas_GLWB',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            assamFlood: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'as_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            }),
+            biharFloodAnnual: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
+                layers: 'br_fld_2010',
+                format: 'image/png',
+                transparent: true,
+                attribution: 'Bhuvan WMS service'
+            })
+        };
+
+        var currentLayer = null;
 
         function toggleLayer(layerName) {
-            alert('Layer selected: ' + layerName);
-            // Implement layer toggling functionality here
+            if (currentLayer) {
+                map.removeLayer(currentLayer);
+            }
+
+            switch (layerName) {
+                case 'landCover':
+                    currentLayer = layers.landCover;
+                    break;
+                case 'glacialLakes':
+                    currentLayer = layers.glacialLakes;
+                    break;
+                case 'floodHazard':
+                    currentLayer = layers.floodHazard;
+                    break;
+                case 'floodAnnualLayersAssam':
+                    currentLayer = layers.floodAnnualLayersAssam;
+                    break;
+                case 'floodAnnualLayersBihar':
+                    currentLayer = layers.floodAnnualLayersBihar;
+                    break;
+                case 'indianHimalayas':
+                    currentLayer = layers.indianHimalayas;
+                    break;
+                case 'assamFlood':
+                    currentLayer = layers.assamFlood;
+                    break;
+                case 'biharFloodAnnual':
+                    currentLayer = layers.biharFloodAnnual;
+                    break;
+                default:
+                    currentLayer = null;
+            }
+
+            if (currentLayer) {
+                currentLayer.addTo(map);
+            }
         }
 
         function search() {
@@ -226,16 +303,17 @@
         }
 
         function zoomToLocation(latlng) {
-            // Zoom logic here
+            map.setView(latlng, 13);
         }
 
         function toggleBackground() {
-            var mapElement = document.getElementById('map');
-            if (mapElement.style.background === 'black') {
-                mapElement.style.background = '#ddd';
+            var leafletContainer = document.querySelector('.leaflet-container');
+            if (isBlackBackground) {
+                leafletContainer.style.background = '#ddd';
             } else {
-                mapElement.style.background = 'black';
+                leafletContainer.style.background = '#000';
             }
+            isBlackBackground = !isBlackBackground;
         }
 
         // Add scale control to the bottom right of the map
