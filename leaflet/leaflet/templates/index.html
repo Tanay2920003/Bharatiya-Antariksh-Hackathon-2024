@@ -244,20 +244,39 @@
             popupAnchor: [0, -60]              // Anchor point of the popup relative to the icon
         });
 
-        function fetchMarkers() {
-            fetch('/api/markers')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(markerData => {
-                        // Add a marker with the custom icon
-                        var popupContent = `<b>${markerData.name}</b><br>Latitude: ${markerData.lat}<br>Longitude: ${markerData.lng}`;
-                        L.marker([markerData.lat, markerData.lng], { icon: customIcon }).bindPopup(popupContent).addTo(map);
-                    });
-                });
-        }
+        function toggleLayer(layerName) {
+            if (currentLayer) {
+                map.removeLayer(currentLayer);
+            }
 
-        // Call fetchMarkers function to load markers
-        fetchMarkers();
+            switch (layerName) {
+                case 'landCover':
+                    currentLayer = layers.landCover;
+                    break;
+                case 'glacialLakes':
+                    currentLayer = layers.glacialLakes;
+                    break;
+                case 'floodHazard':
+                    currentLayer = layers.floodHazard;
+                    break;
+                case 'floodAnnualLayersAssam':
+                    currentLayer = layers.floodAnnualLayersAssam;
+                    break;
+                case 'floodAnnualLayersBihar':
+                    currentLayer = layers.floodAnnualLayersBihar;
+                    break;
+                case 'indianHimalayas':
+                    currentLayer = layers.indianHimalayas;
+                    break;
+                case 'assamFlood':
+                    currentLayer = layers.assamFlood;
+                    break;
+                case 'biharFloodAnnual':
+                    currentLayer = layers.biharFloodAnnual;
+                    break;
+                default:
+                    currentLayer = null;
+            }
 
         // Variable to keep track of the layer visibility
         var activeLayers = {}; // Object to track active layers
@@ -320,15 +339,12 @@ function toggleLayer(layerName) {
                 return;
             }
 
-            // Check if the query is a coordinate or a place name
             if (/^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(query)) {
-                // If it's a coordinate
                 var coords = query.split(',').map(coord => parseFloat(coord.trim()));
                 var lat = coords[0];
                 var lng = coords[1];
                 zoomToLocation([lat, lng]);
             } else {
-                // If it's a place name, use Nominatim API to get coordinates
                 url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
                 fetch(url)
                     .then(response => response.json())
@@ -346,47 +362,17 @@ function toggleLayer(layerName) {
 
 
         function zoomToLocation(latlng) {
-            if (marker) {
-                map.removeLayer(marker);  // Remove the existing marker if any
+            map.setView(latlng, 13);
+        }
+
+        function toggleBackground() {
+            var leafletContainer = document.querySelector('.leaflet-container');
+            if (isBlackBackground) {
+                leafletContainer.style.background = '#ddd';
+            } else {
+                leafletContainer.style.background = '#000';
             }
-
-            marker = L.marker(latlng, { icon: customIcon }).addTo(map);
-
-            // Zoom out gradually
-            var currentZoom = map.getZoom();
-            var zoomOutLevel = 5; // Broad level for zooming out
-            var zoomInLevel = 15; // Desired zoom level for the marker
-
-            // Zoom out faster
-            var zoomStep = 0.2;
-            var zoomInterval = 20; // Shorter interval for faster zoom out
-
-            var zoomOutInterval = setInterval(() => {
-                if (currentZoom > zoomOutLevel) {
-                    currentZoom -= zoomStep;
-                    map.setZoom(currentZoom);
-                } else {
-                    clearInterval(zoomOutInterval);
-
-                    // Delay for 1 second before zooming in
-                    setTimeout(() => {
-                        // Center the marker on the screen
-                        map.setView(latlng, currentZoom);
-
-                        // Zoom in gradually while keeping the marker centered
-                        var zoomInStep = 0.1; // Amount to zoom in each step
-                        var zoomInInterval = setInterval(() => {
-                            if (currentZoom < zoomInLevel) {
-                                currentZoom += zoomInStep;
-                                map.setZoom(currentZoom);
-                                map.setView(latlng, currentZoom); // Keep the marker centered
-                            } else {
-                                clearInterval(zoomInInterval);
-                            }
-                        }, zoomInterval);
-                    }, 1000); // 1 second delay
-                }
-            }, zoomInterval);
+            isBlackBackground = !isBlackBackground;
         }
         function toggleBackground() {
             var mapElement = document.getElementById('map');
@@ -402,7 +388,7 @@ function toggleLayer(layerName) {
         L.control.scale({
             position: 'bottomright',
             maxWidth: 200,
-            imperial: false // This shows the scale in metric units
+            imperial: false
         }).addTo(map);
     </script>
 </body>
