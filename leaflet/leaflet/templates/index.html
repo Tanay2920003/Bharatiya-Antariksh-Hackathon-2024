@@ -151,6 +151,38 @@
             }
             layerVisible = !layerVisible;
         }
+        function search() {
+            var query = document.getElementById('searchInput').value;
+            var url;
+
+            if (query.trim() === '') {
+                alert('Please enter a search term.');
+                return;
+            }
+
+            // Check if the query is a coordinate or a place name
+            if (/^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(query)) {
+                // If it's a coordinate
+                var coords = query.split(',').map(coord => parseFloat(coord.trim()));
+                var lat = coords[0];
+                var lng = coords[1];
+                zoomToLocation([lat, lng]);
+            } else {
+                // If it's a place name, use Nominatim API to get coordinates
+                url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            var lat = data[0].lat;
+                            var lng = data[0].lon;
+                            zoomToLocation([lat, lng]);
+                        } else {
+                            alert('No results found for the search term.');
+                        }
+                    });
+            }
+        }
 
         function search() {
             var query = document.getElementById('searchInput').value;
