@@ -35,6 +35,14 @@ to convert in mono
 
 >ffmpeg -i C:/Users/Tanay/Downloads/audio1.wav -ac 1 C:/Users/Tanay/Downloads/audio1_mono.wav
 
+to install geopy:
+run: pip install geopy
+
+to install spacy:
+run: pip install spacy
+python -m spacy download en_core_web_sm
+
+
 
 
 
