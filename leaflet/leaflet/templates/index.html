@@ -189,17 +189,17 @@
                 transparent: true,
                 attribution: 'Bhoonidhi/Bhuvan WMS service'
             }),
-            glacialLakes: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/", {
+            glacialLakes: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms", {
                 layers: 'Indianhimalayas:indianhimalayas_GLWB',
                 format: 'image/png',
                 transparent: true,
-                attribution: 'Bhuvan WMS service'
+                attribution: 'Bhoonidhi/Bhuvan WMS service'
             }),
             floodHazard: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/hazard.exe", {
                 layers: 'as_hz',
                 format: 'image/png',
                 transparent: true,
-                attribution: 'Bhuvan WMS service'
+                attribution: 'Bhoonidhi/Bhuvan WMS service'
             }),
             floodAnnualLayersAssam: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
                 layers: 'as_fld_2010',
@@ -213,24 +213,6 @@
                 transparent: true,
                 attribution: 'Bhuvan WMS service'
             }),
-            indianHimalayas: L.tileLayer.wms("https://bhuvan-vec2.nrsc.gov.in/bhuvan/gwc/service/wmts/", {
-                layers: 'Indianhimalayas:indianhimalayas_GLWB',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Bhuvan WMS service'
-            }),
-            assamFlood: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
-                layers: 'as_fld_2010',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Bhuvan WMS service'
-            }),
-            biharFloodAnnual: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
-                layers: 'br_fld_2010',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Bhuvan WMS service'
-            })
         };
 
 
@@ -286,15 +268,6 @@ function toggleLayer(layerName) {
                 break;
             case 'floodAnnualLayersBihar':
                 layerToAdd = layers.floodAnnualLayersBihar;
-                break;
-            case 'indianHimalayas':
-                layerToAdd = layers.indianHimalayas;
-                break;
-            case 'assamFlood':
-                layerToAdd = layers.assamFlood;
-                break;
-            case 'biharFloodAnnual':
-                layerToAdd = layers.biharFloodAnnual;
                 break;
             default:
                 layerToAdd = null;
