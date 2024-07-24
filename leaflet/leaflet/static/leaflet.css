@@ -430,7 +430,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-control-attribution,
 .leaflet-control-scale-line {
 	padding: 0 5px;
-	color: #333;
+	color: #fc0000;
 	line-height: 1.4;
 	}
 .leaflet-control-attribution a {
