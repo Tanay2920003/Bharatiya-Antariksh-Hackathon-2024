@@ -160,15 +160,6 @@
             <div class="dropdown-content">
                 <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
                 <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
-                <button onclick="toggleLayer('floodHazard')">Flood Hazard</button>
-                <button onclick="toggleLayer('floodAnnualLayersAssam')">Flood Annual Layers (Assam)</button>
-                <button onclick="toggleLayer('floodAnnualLayersBihar')">Flood Annual Layers (Bihar)</button>
-                <div class="submenu">
-                    <button onclick="toggleLayer('indianHimalayas')">Indian Himalayas</button>
-                </div>
-                <div class="submenu">
-                    <button onclick="toggleLayer('assamFlood')">Assam Flood</button>
-                </div>
             </div>
         </div>
     </div>
@@ -194,24 +185,6 @@
                 format: 'image/png',
                 transparent: true,
                 attribution: 'Bhoonidhi/Bhuvan WMS service'
-            }),
-            floodHazard: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/hazard.exe", {
-                layers: 'as_hz',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Bhoonidhi/Bhuvan WMS service'
-            }),
-            floodAnnualLayersAssam: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
-                layers: 'as_fld_2010',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Bhuvan WMS service'
-            }),
-            floodAnnualLayersBihar: L.tileLayer.wms("https://bhuvan-ras2.nrsc.gov.in/cgi-bin/flood.exe", {
-                layers: 'br_fld_2010',
-                format: 'image/png',
-                transparent: true,
-                attribution: 'Bhuvan WMS service'
             }),
         };
 
@@ -259,15 +232,6 @@ function toggleLayer(layerName) {
                 break;
             case 'glacialLakes':
                 layerToAdd = layers.glacialLakes;
-                break;
-            case 'floodHazard':
-                layerToAdd = layers.floodHazard;
-                break;
-            case 'floodAnnualLayersAssam':
-                layerToAdd = layers.floodAnnualLayersAssam;
-                break;
-            case 'floodAnnualLayersBihar':
-                layerToAdd = layers.floodAnnualLayersBihar;
                 break;
             default:
                 layerToAdd = null;
