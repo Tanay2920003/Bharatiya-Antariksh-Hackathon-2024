@@ -21,7 +21,7 @@
             width: 100%;
             position: relative;
         }
-        .button-container, .search-container, .grid-button-container {
+        .button-container, .search-container, .grid-button-container , .ai-button-container{
             position: absolute;
             z-index: 1000;
         }
@@ -39,7 +39,12 @@
             right: 25px;
             transform: translateY(-50%);
         }
-        .button-container button, .search-container input , .grid-button-container button {
+        .ai-button-container {
+            top: 75%;
+            right: 22px;
+            transform: translateY(-50%);
+        }
+        .button-container button, .search-container input , .grid-button-container button ,.ai-button-container button  {
             padding: 10px;
             font-size: 16px;
             border: none;
@@ -65,6 +70,13 @@
             color: white;
         }
         .grid-button-container button:hover {
+            background-color: #0056b3;
+        }
+        .ai-button-container button {
+            background-color: #007BFF;
+            color: white;
+        }
+        .ai-button-container button:hover {
             background-color: #0056b3;
         }
         /* Custom CSS for the scale control */
@@ -153,6 +165,10 @@
     <div class="grid-button-container">
         <button onclick="toggleBackground()">#</button> <!-- Grid icon -->
     </div>
+
+    <div class="ai-button-container">
+    <img onclick="toggleBackground()" src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
+</div>
 
     <div class="button-container">
         <div class="dropdown">
