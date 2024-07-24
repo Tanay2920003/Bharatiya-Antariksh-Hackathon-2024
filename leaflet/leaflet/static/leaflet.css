@@ -321,8 +321,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 	border-bottom-left-radius: 15px;
-	border-bottom-right
-	-radius: 15px;
+	border-bottom-right-radius: 15px;
 	}
 .leaflet-bar a.leaflet-disabled {
 	cursor: default;
@@ -336,12 +335,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	line-height: 30px;
 	}
 .leaflet-touch .leaflet-bar a:first-child {
-	border-top-left-radius: 2px;
-	border-top-right-radius: 2px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
 	}
 .leaflet-touch .leaflet-bar a:last-child {
-	border-bottom-left-radius: 2px;
-	border-bottom-right-radius: 2px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
 	}
 
 /* zoom control */
