@@ -1,5 +1,3 @@
-
-
 import os
 import pyaudio
 import queue
@@ -13,7 +11,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "hybrid-sunbeam-429814-a0-7aae21d
 
 # Audio recording parameters
 RATE = 16000
-CHUNK = int(RATE / 10)  # 100ms
+CHUNK = int(RATE / 1)  # 100ms
 
 
 class MicrophoneStream:
@@ -71,21 +69,24 @@ class MicrophoneStream:
 
             yield b''.join(data)
 
-def extract_cities(text):
-        nlp = spacy.load("en_core_web_sm")
-        try:
-            doc = nlp(text)
-            geolocator = Nominatim(user_agent="geoapiExercises")
 
-            cities = []
-            for ent in doc.ents:
-                if ent.label_ == "GPE":
-                    location = geolocator.geocode(ent.text)
-                    if location:
-                        cities.append(ent.text)
-            return cities
-        except PermissionError as e:
-            print(f"Permission error: {e}")
+def extract_cities(text):
+    nlp = spacy.load("en_core_web_sm")
+    try:
+        doc = nlp(text)
+        geolocator = Nominatim(user_agent="geoapiExercises")
+
+        cities = []
+        for ent in doc.ents:
+            if ent.label_ == "GPE":
+                location = geolocator.geocode(ent.text)
+                if location:
+                    cities.append(ent.text)
+        return cities
+    except PermissionError as e:
+        print(f"Permission error: {e}")
+
+
 def listen_print_loop(responses, language_code):
     """Iterates through server responses and prints them."""
     for response in responses:
@@ -99,13 +100,13 @@ def listen_print_loop(responses, language_code):
         transcript = result.alternatives[0].transcript
         cities = extract_cities(transcript)
         print("Cities found:", cities)
+        print("Transcript:", transcript)
 
 
 def main():
     client = speech.SpeechClient()
 
     # Create configurations for both languages
-
     config_in = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
@@ -124,17 +125,16 @@ def main():
         requests_in = (speech.StreamingRecognizeRequest(audio_content=content)
                        for content in audio_generator)
 
-        # Create threads for both language configurations
-        response_thread_in = threading.Thread(
-            target=listen_print_loop,
-            args=(client.streaming_recognize(streaming_config_in, requests_in), "en-IN")
-        )
-        response_thread_in.start()
+        def recognize_stream():
+            responses_in = client.streaming_recognize(streaming_config_in, requests_in)
+            listen_print_loop(responses_in, "en-IN")
 
-        try:
-            response_thread_in.join()
-        except KeyboardInterrupt:
-            print("Interrupted by user")
+        # Create and start the recognition thread
+        recognition_thread = threading.Thread(target=recognize_stream)
+        recognition_thread.start()
+
+        # Wait for the recognition thread to finish
+        recognition_thread.join()
 
     # Confirm installation and functionality
     print("Finished")
