@@ -462,6 +462,34 @@ function toggleLayer(layerName) {
                 L.latLng(57.6792, 11.949)
             ]
         }).addTo(map);
+        var mousePosition;
+var markers = []; // Array to store all markers
+
+map.on('mousemove', function(e) {
+    mousePosition = e.latlng;
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'm' || event.key === 'M') {
+        handleMarker();
+    }
+});
+
+function handleMarker() {
+    if (mousePosition) {
+        var markerAtMousePosition = markers.find(marker => marker.getLatLng().equals(mousePosition));
+        if (markerAtMousePosition) {
+            map.removeLayer(markerAtMousePosition);
+            markers = markers.filter(marker => !marker.getLatLng().equals(mousePosition));
+        } else {
+            var newMarker = L.marker(mousePosition, { icon: customIcon }).addTo(map)
+                .bindPopup("New marker at " + mousePosition.toString())
+                .openPopup();
+            markers.push(newMarker);
+        }
+    }
+}
+
 
 
     </script>
