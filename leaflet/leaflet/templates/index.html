@@ -153,48 +153,6 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        /* Style for the popup button */
-        .popup-button {
-            position: absolute;
-            top: 92%;
-            left: 25%;
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            border-radius: 10px;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            cursor: pointer;
-            z-index: 1001; /* Ensure it's above the map */
-        }
-
-        /* The actual popup */
-        .popup .popuptext {
-            visibility: hidden;
-            width: 250px;
-            height: 50px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px 0;
-            position: absolute;
-            z-index: 1002; /* Ensure it's above the map */
-            left: 40%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* Toggle this class - hide and show the popup */
-        .popup .show {
-            visibility: visible;
-            opacity: 1;
-        }
     </style>
 </head>
 <body>
