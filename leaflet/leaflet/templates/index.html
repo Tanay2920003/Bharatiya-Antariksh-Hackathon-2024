@@ -362,6 +362,7 @@ function toggleLayer(layerName) {
                             var lat = data[0].lat;
                             var lng = data[0].lon;
                             zoomToLocation([lat, lng]);
+                            route(lat,lng);
                         } else {
                             alert('No results found for the search term.');
                         }
@@ -456,12 +457,14 @@ function toggleLayer(layerName) {
                 }, 3000); // Hide after 3 seconds
             }, 2000); // Show after 2 seconds
         };
+        function route(a,b){
         L.Routing.control({
             waypoints: [
-                L.latLng(57.74, 11.94),
-                L.latLng(57.6792, 11.949)
+                L.latLng(a, b),
+                L.latLng(a+1, b+1)
             ]
         }).addTo(map);
+        }
         var mousePosition;
 var markers = []; // Array to store all markers
 
