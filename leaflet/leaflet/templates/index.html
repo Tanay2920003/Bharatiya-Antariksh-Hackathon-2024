@@ -221,6 +221,7 @@
             <div class="dropdown-content">
                 <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
                 <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
+                <button onclick="toggleLayer('googleSatellite')">Google Satellite</button>
             </div>
         </div>
     </div>
@@ -247,6 +248,7 @@
                 transparent: true,
                 attribution: 'Bhoonidhi/Bhuvan WMS service'
             }),
+            googleSatellite: L.tileLayer.provider('GoogleSatellite')
         };
 
 
