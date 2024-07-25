@@ -21,7 +21,7 @@
             width: 100%;
             position: relative;
         }
-        .button-container, .search-container, .grid-button-container , .ai-button-container{
+        .button-container, .search-container, .grid-button-container {
             position: absolute;
             z-index: 1000;
         }
@@ -40,17 +40,27 @@
             transform: translateY(-50%);
         }
         .ai-button-container {
-            top: 80%;
+            top: 82%;
             right: 22px;
             transform: translateY(-50%);
+            position: absolute;
+            z-index: 1000;
         }
-        .button-container button, .search-container input , .grid-button-container button ,.ai-button-container button  {
+        .button-container button, .search-container input , .grid-button-container button   {
             padding: 10px;
             font-size: 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
+        .ai-button-container button  {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
         .button-container button {
             background-color: #007BFF;
             color: white;
@@ -78,6 +88,10 @@
         }
         .ai-button-container button:hover {
             background-color: #0056b3;
+        }
+        .ai-button-container button img {
+            width: 40px; /* Adjust the width of the icon */
+            height: 40px; /* Adjust the height of the icon */
         }
         /* Custom CSS for the scale control */
         .leaflet-control-scale {
@@ -214,7 +228,9 @@
 
 <script src="https://cdn.userway.org/widget.js" data-account="aDJM4sQbtW"></script>
     <div class="ai-button-container">
-    <img onclick="toggleBackground()" src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
+        <button onclick="">
+            <img src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
+        </button>
 </div>
 
     <div class="button-container">
