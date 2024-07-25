@@ -84,11 +84,11 @@
             background-color: #0056b3;
         }
         .ai-button-container button {
-            background-color: #007BFF;
+            background-color: transparent;
             color: white;
         }
         .ai-button-container button:hover {
-            background-color: #0056b3;
+            background-color: transparent;
         }
         .ai-button-container button img {
             width: 40px; /* Adjust the width of the icon */
@@ -268,10 +268,12 @@
 
 <script src="https://cdn.userway.org/widget.js" data-account="aDJM4sQbtW"></script>
     <div class="ai-button-container">
-        <button id="openai">
-            <img src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
+        <button onclick="openai">
+            <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
+    <dotlottie-player src="https://lottie.host/5e6fcf88-2460-40a3-accf-548b49433a85/E89yEFnY57.json" background="transparent" speed="1" style="width: 90px; height: 90px;" loop autoplay></dotlottie-player>
         </button>
-    </div>
+</div>
     <div id="ai-popup" class="ai-popup">
         <div class="ai-popup-content">
             <span class="ai-close-btn">&times;</span>
