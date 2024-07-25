@@ -34,7 +34,7 @@ position: absolute;
 if (annyang) {
   SpeechKITT.annyang();
   SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat-clouds.css');
-  SpeechKITT.setInstructionsText("Try 'Fly to Berlin' or any other city!");
+  SpeechKITT.setInstructionsText("Try 'Locate Berlin' or 'Zoom in'!");
   SpeechKITT.vroom();
 }
 
@@ -52,12 +52,22 @@ function ajax1() {
         url: inurl,
         dataType: "json"
     });}};
+
+const zoomMap = function(direction) {
+  if (direction === 'in') {
+    map.zoomIn();
+  } else if (direction === 'out') {
+    map.zoomOut();
+  }
+};
+
 const stoplistening = function(){
 	annyang.abort();}
 if (annyang) {
   const commands = {
     'hello': () => { alert('Hey there, try some commands!'); },
-	'fly to *city': flyToCoords,
+	'locate *city': flyToCoords,
+	'zoom *direction': zoomMap,
 	'stop listening': stoplistening
   };
   annyang.addCommands(commands);
