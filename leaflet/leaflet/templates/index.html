@@ -297,13 +297,14 @@
     </div>
 
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script data-goatcounter="https://georocks.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script>
         var map = L.map('map').setView([20.59, 78.96], 5);
         if (annyang) {
@@ -341,7 +342,7 @@
 
         var marker;  // Variable to store the marker
         var customIcon = L.icon({
-            iconUrl: '{{ url_for('static', filename='images/marker-icon-2x.png') }}',  // Path to your custom icon
+            iconUrl: "{{ url_for('static', filename='images/marker-icon-2x.png') }}",  // Path to your custom icon
             iconSize: [26, 42],                // Size of the icon
             iconAnchor: [19, 60],              // Anchor point of the icon
             popupAnchor: [0, -60]      });        // Anchor point of the popup relative to the icon
