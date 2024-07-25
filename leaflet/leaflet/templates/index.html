@@ -6,6 +6,12 @@
     <title>Flask + Leaflet</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='leaflet.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='routing.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script data-goatcounter="https://georocks.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -252,6 +258,13 @@
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script>
         var map = L.map('map').setView([20.59, 78.96], 5);
+        if (annyang) {
+  SpeechKITT.annyang();
+  SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat-clouds.css');
+  SpeechKITT.setInstructionsText("Try 'Locate Berlin' or 'Zoom in'!");
+  SpeechKITT.vroom();
+}
+
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -493,7 +506,49 @@ function handleMarker() {
         }
     }
 }
+const flyToCoords = function(city) {
+    const inurl  = "https://nominatim.openstreetmap.org/search?q=" + city + "&limit=1&format=json&addressdetails=1";
+    console.log(city);
+    $.when(ajax1()).done(function(data){
+        if (data.length > 0) {
+            map.flyTo([data[0]["lat"], data[0]["lon"]], 12);
+        } else {
+            alert("City not found!");
+        }
+    }).fail(function() {
+        alert("Error fetching data!");
+    });
 
+    function ajax1() {
+        return $.ajax({
+            url: inurl,
+            dataType: "json"
+        });
+    }
+};
+
+const zoomMap = function(direction) {
+  if (direction === 'in') {
+    map.zoomIn();
+  } else if (direction === 'out') {
+    map.zoomOut();
+  }
+};
+
+const stopListening = function() {
+    annyang.abort();
+};
+
+if (annyang) {
+  const commands = {
+    'hello': () => { alert('Hey there, try some commands!'); },
+    'locate *city': flyToCoords,
+    'zoom *direction': zoomMap,
+    'stop listening': stopListening
+  };
+  annyang.addCommands(commands);
+  annyang.start();
+}
 
 
     </script>
