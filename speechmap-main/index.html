@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SpeechMap</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+<script data-goatcounter="https://georocks.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+
+<body>
+
+<div id='map'></div>
+
+<style>
+#skitt-ui{
+z-index: 1000 !important;
+}
+
+#map{
+position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+</style>
+<script>
+if (annyang) {
+  SpeechKITT.annyang();
+  SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat-clouds.css');
+  SpeechKITT.setInstructionsText("Try 'Fly to Berlin' or any other city!");
+  SpeechKITT.vroom();
+}
+
+var map = L.map("map").setView([50, 8], 5);
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+const flyToCoords = function(city) {
+	inurl  = "https://nominatim.openstreetmap.org/search?q=" + city + "&limit=1&format=json&addressdetails=1";
+	console.log(city);
+	$.when(ajax1()).done(function(data){
+	map.flyTo([data[0]["lat"],data[0]["lon"]],12)
+	});
+function ajax1() {
+    return $.ajax({
+        url: inurl,
+        dataType: "json"
+    });}};
+const stoplistening = function(){
+	annyang.abort();}
+if (annyang) {
+  const commands = {
+    'hello': () => { alert('Hey there, try some commands!'); },
+	'fly to *city': flyToCoords,
+	'stop listening': stoplistening
+  };
+  annyang.addCommands(commands);
+  annyang.start();
+}
+</script>
+</body>
+</html>
