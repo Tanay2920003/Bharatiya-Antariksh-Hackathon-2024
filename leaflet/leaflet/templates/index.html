@@ -152,39 +152,36 @@
         }
         .dropdown:hover .dropdown-content {
             display: block;
-        }
-        /* Style for the popup button */
+        }/* Style for the popup button */
         .popup-button {
-            position: absolute;
-            top: 92%;
-            left: 45%;
+            position: fixed;
+            left: 0;
+            top: 100px;
+            transform: translateY(-50%);
             background-color: #4CAF50; /* Green */
             border: none;
             color: white;
-            border-radius: 10px;
-            padding: 10px 20px;
+            padding: 15px 32px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
             cursor: pointer;
-            z-index: 1001; /* Ensure it's above the map */
         }
 
         /* The actual popup */
         .popup .popuptext {
             visibility: hidden;
-            width: 250px;
-            height: 50px;
-            background-color: #4CAF50;
+            width: 200px;
+            background-color: #555;
             color: #fff;
             text-align: center;
-            border-radius: 10px;
+            border-radius: 6px;
             padding: 8px 0;
-            position: absolute;
-            z-index: 1002; /* Ensure it's above the map */
-            left: 40%;
-            top: 50%;
+            position: fixed;
+            z-index: 1;
+            left: 20px;
+            top: 100px;
             transform: translateY(-50%);
             opacity: 0;
             transition: opacity 0.3s;
@@ -199,8 +196,8 @@
 </head>
 <body>
     <div class="popup">
-        <button class="popup-button" onclick="myFunction()">GEOSAGE</button>
-        <span class="popuptext" id="myPopup"><p>Welcome to </p><p> GEOSAGE! </p></span>
+    <button class="popup-button" onclick="myFunction()">Click me to toggle the popup!</button>
+    <span class="popuptext" id="myPopup">A Simple Popup!</span>
     </div>
     <div class="search-container">
         <input id="searchInput" type="text" placeholder="Search for a place or coordinates..." onkeydown="if(event.key === 'Enter'){search();}">
@@ -210,10 +207,10 @@
     <div class="grid-button-container">
         <button onclick="toggleBackground()">#</button> <!-- Grid icon -->
     </div>
-    <script src="https://cdn.userway.org/widget.js" data-account="aDJM4sQbtW"></script>
+<script src="https://cdn.userway.org/widget.js" data-account="aDJM4sQbtW"></script>
     <div class="ai-button-container">
-        <img onclick="toggleBackground()" src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
-    </div>
+    <img onclick="toggleBackground()" src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
+</div>
 
     <div class="button-container">
         <div class="dropdown">
@@ -221,7 +218,6 @@
             <div class="dropdown-content">
                 <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
                 <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
-                <button onclick="toggleLayer('googleSatellite')">Google Satellite</button>
             </div>
         </div>
     </div>
@@ -248,7 +244,6 @@
                 transparent: true,
                 attribution: 'Bhoonidhi/Bhuvan WMS service'
             }),
-            googleSatellite: L.tileLayer.provider('GoogleSatellite')
         };
 
 
@@ -260,82 +255,153 @@
             popupAnchor: [0, -60]              // Anchor point of the popup relative to the icon
         });
 
-        fetchMarkers();
-
         function fetchMarkers() {
-            fetch('/markers')
+            fetch('/api/markers')
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(markerData => {
-                        var marker = L.marker([markerData.lat, markerData.lng], {icon: customIcon}).addTo(map);
-                        marker.bindPopup(markerData.description);
+                        // Add a marker with the custom icon
+                        var popupContent = `<b>${markerData.name}</b><br>Latitude: ${markerData.lat}<br>Longitude: ${markerData.lng}`;
+                        L.marker([markerData.lat, markerData.lng], { icon: customIcon }).bindPopup(popupContent).addTo(map);
                     });
-                })
-                .catch(error => console.error('Error fetching markers:', error));
+                });
         }
+
+        // Call fetchMarkers function to load markers
+        fetchMarkers();
+
+        // Variable to keep track of the layer visibility
+        var activeLayers = {}; // Object to track active layers
+
+function toggleLayer(layerName) {
+    // Check if the layer is currently active
+    if (activeLayers[layerName]) {
+        // If the layer is active, remove it
+        setTimeout(() => {
+            map.removeLayer(activeLayers[layerName]);
+            delete activeLayers[layerName]; // Remove from active layers tracking
+        }, 1000); // Delay of 1 second
+    } else {
+        // If the layer is not active, add it
+        var layerToAdd;
+        switch (layerName) {
+            case 'landCover':
+                layerToAdd = layers.landCover;
+                break;
+            case 'glacialLakes':
+                layerToAdd = layers.glacialLakes;
+                break;
+            default:
+                layerToAdd = null;
+        }
+
+        if (layerToAdd) {
+            setTimeout(() => {
+                map.addLayer(layerToAdd);
+                activeLayers[layerName] = layerToAdd; // Add to active layers tracking
+            }, 1000); // Delay of 1 second
+        }
+    }
+}
 
         function search() {
-            var input = document.getElementById('searchInput').value;
-            if (input) {
-                if (input.includes(',')) {
-                    var coords = input.split(',').map(Number);
-                    if (coords.length === 2) {
-                        map.setView(coords, 13);
-                    } else {
-                        alert('Invalid coordinates. Please enter as "lat,lng".');
-                    }
+            var query = document.getElementById('searchInput').value;
+            var url;
+
+            if (query.trim() === '') {
+                alert('Please enter a search term.');
+                return;
+            }
+
+            // Check if the query is a coordinate or a place name
+            if (/^\s*-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?\s*$/.test(query)) {
+                // If it's a coordinate
+                var coords = query.split(',').map(coord => parseFloat(coord.trim()));
+                var lat = coords[0];
+                var lng = coords[1];
+                zoomToLocation([lat, lng]);
+            } else {
+                // If it's a place name, use Nominatim API to get coordinates
+                url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            var lat = data[0].lat;
+                            var lng = data[0].lon;
+                            zoomToLocation([lat, lng]);
+                        } else {
+                            alert('No results found for the search term.');
+                        }
+                    });
+            }
+        }
+
+
+        function zoomToLocation(latlng) {
+            if (marker) {
+                map.removeLayer(marker);  // Remove the existing marker if any
+            }
+
+            marker = L.marker(latlng, { icon: customIcon }).addTo(map);
+
+            // Zoom out gradually
+            var currentZoom = map.getZoom();
+            var zoomOutLevel = 5; // Broad level for zooming out
+            var zoomInLevel = 12; // Desired zoom level for the marker
+
+            // Zoom out faster
+            var zoomStep = 0.2;
+            var zoomInterval = 20; // Shorter interval for faster zoom out
+
+            var zoomOutInterval = setInterval(() => {
+                if (currentZoom > zoomOutLevel) {
+                    currentZoom -= zoomStep;
+                    map.setZoom(currentZoom);
                 } else {
-                    fetch(`https://nominatim.openstreetmap.org/search?q=${input}&format=json&limit=1`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.length > 0) {
-                                var bbox = data[0].boundingbox.map(Number);
-                                map.fitBounds([[bbox[0], bbox[2]], [bbox[1], bbox[3]]]);
+                    clearInterval(zoomOutInterval);
+
+                    // Delay for 1 second before zooming in
+                    setTimeout(() => {
+                        // Center the marker on the screen
+                        map.setView(latlng, currentZoom);
+
+                        // Zoom in gradually while keeping the marker centered
+                        var zoomInStep = 0.1; // Amount to zoom in each step
+                        var zoomInInterval = setInterval(() => {
+                            if (currentZoom < zoomInLevel) {
+                                currentZoom += zoomInStep;
+                                map.setZoom(currentZoom);
+                                map.setView(latlng, currentZoom); // Keep the marker centered
                             } else {
-                                alert('Location not found.');
+                                clearInterval(zoomInInterval);
                             }
-                        })
-                        .catch(error => console.error('Error searching location:', error));
+                        }, zoomInterval);
+                    }, 1000); // 1 second delay
                 }
-            } else {
-                alert('Please enter a place name or coordinates.');
-            }
+            }, zoomInterval);
         }
-
-        function toggleLayer(layerName) {
-            var layer = layers[layerName];
-            if (map.hasLayer(layer)) {
-                map.removeLayer(layer);
-            } else {
-                map.addLayer(layer);
-            }
-        }
-
-        // Add scale control to the map
-        L.control.scale().addTo(map);
-
-        // Popup button functionality
-        function myFunction() {
-            var popup = document.getElementById("myPopup");
-            popup.classList.toggle("show");
-        }
-
         function toggleBackground() {
             var mapElement = document.getElementById('map');
-            var currentBackgroundColor = mapElement.style.backgroundColor;
-            mapElement.style.backgroundColor = currentBackgroundColor === 'transparent' ? 'rgba(0, 0, 0, 0.5)' : 'transparent';
+            if (mapElement.style.background === 'black') {
+                mapElement.style.background = '#ddd';
+            } else {
+                mapElement.style.background = 'black';
+            }
         }
 
-        // Automatically show popup after 2 seconds and hide after 3 seconds
-        window.onload = function() {
-            setTimeout(function() {
-                var popup = document.getElementById("myPopup");
-                popup.classList.add("show");
-                setTimeout(function() {
-                    popup.classList.remove("show");
-                }, 3000); // Hide after 3 seconds
-            }, 2000); // Show after 2 seconds
-        };
+
+        // Add scale control to the bottom right of the map
+        L.control.scale({
+            position: 'bottomright',
+            maxWidth: 200,
+            imperial: false // This shows the scale in metric units
+        }).addTo(map);
+        // When the user clicks on the button, toggle between hiding and showing the popup
+    function myFunction() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+    }
     </script>
 </body>
 </html>
