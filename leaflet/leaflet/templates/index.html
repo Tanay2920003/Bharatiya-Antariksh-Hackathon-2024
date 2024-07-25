@@ -281,10 +281,9 @@
         var marker;  // Variable to store the marker
         var customIcon = L.icon({
             iconUrl: '{{ url_for('static', filename='images/marker-icon-2x.png') }}',  // Path to your custom icon
-            iconSize: [38, 60],                // Size of the icon
+            iconSize: [0, 1],                // Size of the icon
             iconAnchor: [19, 60],              // Anchor point of the icon
-            popupAnchor: [0, -60]              // Anchor point of the popup relative to the icon
-        });
+            popupAnchor: [0, -60]      });        // Anchor point of the popup relative to the icon
 
         function fetchMarkers() {
             fetch('/api/markers')
