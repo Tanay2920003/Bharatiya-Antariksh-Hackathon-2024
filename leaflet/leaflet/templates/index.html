@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask + Leaflet</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='leaflet.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='routing.css') }}" />
     <style>
         * {
             box-sizing: border-box;
@@ -252,8 +251,6 @@
 
 
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script>
         var map = L.map('map').setView([20.59, 78.96], 5);
 
@@ -464,12 +461,6 @@ function toggleLayer(layerName) {
                 }, 3000); // Hide after 3 seconds
             }, 2000); // Show after 2 seconds
         };
-        L.Routing.control({
-            waypoints: [
-                L.latLng(57.74, 11.94),
-                L.latLng(57.6792, 11.949)
-            ]
-        }).addTo(map);
     </script>
 </body>
 </html>
