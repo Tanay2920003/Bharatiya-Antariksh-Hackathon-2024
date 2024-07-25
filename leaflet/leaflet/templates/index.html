@@ -6,12 +6,6 @@
     <title>Flask + Leaflet</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='leaflet.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='routing.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script data-goatcounter="https://georocks.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -215,6 +209,43 @@
             visibility: visible;
             opacity: 1;
         }
+        /*ai-button*/
+        #openai {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.ai-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1003;
+}
+
+.ai-popup-content {
+    background-color: white;
+    padding: 20px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1004;
+}
+
+.ai-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -237,10 +268,20 @@
 
 <script src="https://cdn.userway.org/widget.js" data-account="aDJM4sQbtW"></script>
     <div class="ai-button-container">
-        <button onclick="">
+        <button id="openai">
             <img src="https://img.icons8.com/?size=100&id=2f8efjyRWNVz&format=png&color=000000" alt="Grid icon">
         </button>
-</div>
+    </div>
+    <div id="ai-popup" class="ai-popup">
+        <div class="ai-popup-content">
+            <span class="ai-close-btn">&times;</span>
+            <p>1. To locate, speak: "locate city_name"</p>
+            <p>2. Zoom in/out, speak: "zoom direction"</p>
+            <p>3. To place marker, speak: "add a marker to city_name"</p>
+            <p>4. To specify speak: "show layer_name"</p>
+            <p>5. To navigate speak: "Navigate city_name1 to city_name2"</p>
+        </div>
+    </div>
 
     <div class="button-container">
         <div class="dropdown">
@@ -256,14 +297,19 @@
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script data-goatcounter="https://georocks.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <script>
         var map = L.map('map').setView([20.59, 78.96], 5);
         if (annyang) {
-  SpeechKITT.annyang();
-  SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat-clouds.css');
-  SpeechKITT.setInstructionsText("Try 'Locate Berlin' or 'Zoom in'!");
-  SpeechKITT.vroom();
-}
+        SpeechKITT.annyang();
+        SpeechKITT.setStylesheet('//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat-clouds.css');
+        SpeechKITT.setInstructionsText("Try 'Locate Berlin' or 'Zoom in'!");
+        SpeechKITT.vroom();
+        }
 
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -549,7 +595,25 @@ if (annyang) {
   annyang.addCommands(commands);
   annyang.start();
 }
+document.addEventListener('DOMContentLoaded', () => {
+    const openPopupBtn = document.getElementById('openai');
+    const popup = document.getElementById('ai-popup');
+    const closeBtn = document.querySelector('.ai-close-btn');
 
+    openPopupBtn.addEventListener('click', () => {
+        popup.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            popup.style.display = 'none';
+        }
+    });
+});
 
     </script>
 </body>
