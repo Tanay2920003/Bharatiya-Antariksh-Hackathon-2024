@@ -220,6 +220,7 @@
             <div class="dropdown-content">
                 <button onclick="toggleLayer('landCover')">Land Cover / Land Use</button>
                 <button onclick="toggleLayer('glacialLakes')">Glacial Lakes / Water Bodies</button>
+                <button onclick="toggleLayer('satellite')">Satellite</button>
             </div>
         </div>
     </div>
@@ -246,6 +247,10 @@
                 transparent: true,
                 attribution: 'Bhoonidhi/Bhuvan WMS service'
             }),
+            satellite:L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            attribution: '&copy; <a href="https://www.google.com/maps/about/versions/">Google Maps</a>',
+            maxZoom: 18
+        }),
         };
 
 
@@ -292,6 +297,9 @@ function toggleLayer(layerName) {
                 break;
             case 'glacialLakes':
                 layerToAdd = layers.glacialLakes;
+                break;
+            case 'satellite':
+                layerToAdd = layers.satellite;
                 break;
             default:
                 layerToAdd = null;
